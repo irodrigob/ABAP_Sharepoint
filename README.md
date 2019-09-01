@@ -6,3 +6,7 @@ Dentro del proyecto hay una serie de programas de ejemplo donde se detalla su fu
 # Dependencias/Dependencies
 
 Hay que tener instalado el repositorio "http_services"(https://github.com/irodrigob/http_services) para su funcionamiento. / The "http_services" repository (https://github.com/irodrigob/http_services) must be installed for its operation.
+
+# Prerequisitos / Prerequisites
+
+Versión ABAP 7.4 o superior / ABAP 7.4 or higher
