@@ -10,3 +10,14 @@ Hay que tener instalado el repositorio "http_services"(https://github.com/irodri
 # Prerequisitos / Prerequisites
 
 Versión ABAP 7.4 o superior / ABAP 7.4 or higher
+
+# Funcionalidad / Functionality
+
+- Subida y borrada de ficheros / Upload and delete of files
+- Creación y borrado de carpeta / Creation and delete of folder
+- Obtener usuarios y roles asociados a una carpeta / Get users and roles associated with a folder
+- Ruptura herencia en carpeta / break role inheritance in folder
+- Añadir/borrar usuario y rol a una carpeta / Add/delete user and role to a folder
+- Obtener información de un usuario / Get information from a user
+- Obtener carpetas / Get folders
+- Obtener ficheros / Get files
