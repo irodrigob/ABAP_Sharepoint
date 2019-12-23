@@ -21,3 +21,5 @@ Versión ABAP 7.4 o superior / ABAP 7.4 or higher
 - Obtener información de un usuario / Get information from a user
 - Obtener carpetas / Get folders
 - Obtener ficheros / Get files
+- Creación de documento library / Document library creation
+- Añadir/borrar usuario y rol a una librería / Add/delete user and role to library
