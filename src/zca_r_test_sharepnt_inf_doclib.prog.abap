@@ -1,25 +1,20 @@
 *&---------------------------------------------------------------------*
-*& Report ZCA_R_TEST_SHAREPNT_DEL_US_FOL
+*& Report ZCA_R_TEST_SHAREPNT_INF_DOCLIB
 *&---------------------------------------------------------------------*
 *&
 *&---------------------------------------------------------------------*
-REPORT zca_r_test_sharepnt_del_us_fol.
+REPORT zca_r_test_sharepnt_inf_doclib.
 
 PARAMETERS: p_cl_id TYPE string LOWER CASE,
             p_cl_se TYPE string LOWER CASE,
             p_realm TYPE string LOWER CASE,
             p_host  TYPE string LOWER CASE,
             p_site  TYPE string LOWER CASE,
-            p_dlib  TYPE string LOWER CASE,
             p_https AS CHECKBOX DEFAULT 'X'.
 
 SELECTION-SCREEN SKIP 2.
 
-PARAMETERS: p_login1 TYPE string LOWER CASE,
-            p_login2 TYPE string LOWER CASE,
-            p_login3 TYPE string LOWER CASE,
-            p_folder TYPE string LOWER CASE.
-
+PARAMETERS p_dlib TYPE string LOWER CASE.
 
 START-OF-SELECTION.
 
@@ -30,24 +25,17 @@ START-OF-SELECTION.
                                                          iv_domain = p_host
                                                          iv_realm = p_realm
                                                          iv_site = p_site
-                                                         iv_document_library = p_dlib
+                                                         iv_document_library = space
                                                          iv_protocol_https = p_https
                                                          iv_generate_tokeh_auth = abap_true ).
 
-      mo_sharepoint->remove_user_folder(
+      mo_sharepoint->get_doc_library_info(
         EXPORTING
-          iv_user_cloud = p_login1
-          iv_user_windows = p_login2
-          iv_user_saml = p_login3
-          iv_path_folder = p_folder
+          iv_name           = p_dlib
         IMPORTING
-          ev_user_removed = DATA(lv_role_removed) ).
+          es_info = DATA(ls_info) ).
 
-      IF lv_role_removed = abap_true.
-        WRITE:/ 'Role removed'.
-      ELSE.
-        WRITE:/ 'Error to remove role'.
-      ENDIF.
+      cl_demo_output=>display_data( ls_info ).
 
     CATCH zcx_ca_http_services INTO DATA(lo_excep).
       cl_demo_output=>write_text( text = |Status code: { lo_excep->mv_status_code }| ).
