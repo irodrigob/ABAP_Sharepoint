@@ -726,7 +726,7 @@ CLASS zcl_ca_sharepoint_rest IMPLEMENTATION.
     CONDENSE mv_domain.
 
     " Se genera la clase que gestionará las peticiones http
-    create_http_client( iv_client = mv_domain iv_is_https = iv_protocol_https ).
+    create_http_client( iv_host = mv_domain iv_is_https = iv_protocol_https ).
 
     " Se genera el token de autentificación si se especifica por parámetro
     IF iv_generate_tokeh_auth = abap_true.
