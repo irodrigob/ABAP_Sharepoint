@@ -31,7 +31,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_ca_microsoft_auth IMPLEMENTATION.
+CLASS ZCL_CA_MICROSOFT_AUTH IMPLEMENTATION.
 
 
   METHOD generate_token_auth.
@@ -39,7 +39,7 @@ CLASS zcl_ca_microsoft_auth IMPLEMENTATION.
 
     CLEAR: rv_token.
 
-    create_http_client( iv_client = cv_url_access_control iv_is_https = abap_true ).
+    create_http_client( iv_host = cv_url_access_control iv_is_https = abap_true ).
 
     set_form_value( iv_name  = 'grant_type' iv_value = 'client_credentials' ).
     set_form_value( iv_name  = 'client_id' iv_value = |{ iv_client_id }@{ iv_realm }| ).
