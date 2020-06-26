@@ -297,7 +297,9 @@ CLASS zcl_ca_sharepoint_rest DEFINITION
         !iv_id_user      TYPE int4 OPTIONAL
         !iv_path_folder  TYPE string
       EXPORTING
-        !ev_user_removed TYPE sap_bool.
+        !ev_user_removed TYPE sap_bool
+      RAISING
+        zcx_ca_http_services .
     METHODS remove_user_library
       IMPORTING
         !iv_user_cloud   TYPE string OPTIONAL
@@ -332,7 +334,9 @@ CLASS zcl_ca_sharepoint_rest DEFINITION
         !iv_path_folder TYPE string
         !iv_user_id     TYPE int4
       EXPORTING
-        !et_roles       TYPE tt_get_user_folder_role.
+        !et_roles       TYPE tt_get_user_folder_role
+      RAISING
+        zcx_ca_http_services .
     METHODS get_user_library_role
       IMPORTING
         !iv_library TYPE string
@@ -346,7 +350,9 @@ CLASS zcl_ca_sharepoint_rest DEFINITION
         !iv_path_folder TYPE string
         !iv_user_id     TYPE int4
       EXPORTING
-        !es_member      TYPE ts_get_user_folder_member.
+        !es_member      TYPE ts_get_user_folder_member
+      RAISING
+        zcx_ca_http_services .
     METHODS get_user_library_member
       IMPORTING
         !iv_library TYPE string
@@ -1643,8 +1649,9 @@ CLASS zcl_ca_sharepoint_rest IMPLEMENTATION.
 
     " Se pasa los datos recogidos a la estructura de salida
     LOOP AT ls_receive-value ASSIGNING FIELD-SYMBOL(<ls_values>).
-      APPEND INITIAL LINE TO et_users ASSIGNING FIELD-SYMBOL(<ls_user>).
-      <ls_user>-user_id = <ls_values>-principal_id.
+
+      DATA(lv_anyadir) = abap_true.
+      DATA(ls_user) = VALUE ts_get_user_folder( user_id = <ls_values>-principal_id ).
 
       " Se recupera los roles que tiene asignado en la carpeta
       IF iv_get_role = abap_true.
@@ -1652,10 +1659,12 @@ CLASS zcl_ca_sharepoint_rest IMPLEMENTATION.
             get_user_library_role(
               EXPORTING
                 iv_library = iv_library
-                iv_user_id     = <ls_user>-user_id
+                iv_user_id     = ls_user-user_id
               IMPORTING
-                et_roles       =  <ls_user>-role ).
+                et_roles       =  ls_user-role ).
           CATCH zcx_ca_http_services.
+            lv_anyadir = abap_false.
+
         ENDTRY.
 
       ENDIF.
@@ -1664,21 +1673,27 @@ CLASS zcl_ca_sharepoint_rest IMPLEMENTATION.
             get_user_library_member(
              EXPORTING
                iv_library = iv_library
-               iv_user_id     = <ls_user>-user_id
+               iv_user_id     = ls_user-user_id
              IMPORTING
                es_member = DATA(ls_member) ).
             " Si el el miembro es un usuario el campo de email estará informado, en caso contrario, será u
             " un grupo y habrá que tomar el campo "login_name".
             IF ls_member-email IS NOT INITIAL.
-              <ls_user>-user_loginname = ls_member-email.
+              ls_user-user_loginname = ls_member-email.
             ELSE.
-              <ls_user>-user_loginname = ls_member-login_name.
+              ls_user-user_loginname = ls_member-login_name.
             ENDIF.
             " Tipo de usuario: 1 es usuario y 8 es grupo. Importante para saber como operar a posteriori
-            <ls_user>-user_type = ls_member-principal_type.
+            ls_user-user_type = ls_member-principal_type.
           CATCH zcx_ca_http_services.
+            lv_anyadir = abap_false.
         ENDTRY.
       ENDIF.
+
+      IF lv_anyadir = abap_true.
+        INSERT ls_user INTO TABLE et_users.
+      ENDIF.
+
     ENDLOOP.
   ENDMETHOD.
 
@@ -1734,7 +1749,7 @@ CLASS zcl_ca_sharepoint_rest IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD remove_user_library.
-  DATA ls_user_info TYPE ts_receive_get_user_info.
+    DATA ls_user_info TYPE ts_receive_get_user_info.
 
 * NOTA: Para poder asignar un usuario a una carpeta previamente se tiene que haber parado la herencia de roles sino no funcionara.
 * para eso esta el método BREAK_ROLE_INHERITANCE que se encarga de eso. Esa acción no se hace aquí porque el objetivo del método
