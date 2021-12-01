@@ -5,7 +5,7 @@ Dentro del proyecto hay una serie de programas de ejemplo donde se detalla su fu
 
 # Dependencias/Dependencies
 
-Hay que tener instalado el repositorio "http_services"(https://github.com/irodrigob/http_services) para su funcionamiento. / The "http_services" repository (https://github.com/irodrigob/http_services) must be installed for its operation.
+Hay que tener instalado el repositorio "ABAP_http_services"(https://github.com/irodrigob/ABAP_http_services) para su funcionamiento. / The "http_services" repository (https://github.com/irodrigob/http_services) must be installed for its operation.
 
 # Prerequisitos / Prerequisites
 
