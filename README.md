@@ -13,7 +13,7 @@ Versión ABAP 7.4 o superior / ABAP 7.4 or higher
 
 # Funcionalidad / Functionality
 
-- Subida y borrada de ficheros / Upload and delete of files
+- Subida y borrado de ficheros / Upload and delete of files
 - Creación y borrado de carpeta / Creation and delete of folder
 - Obtener usuarios y roles asociados a una carpeta / Get users and roles associated with a folder
 - Ruptura herencia en carpeta / break role inheritance in folder
